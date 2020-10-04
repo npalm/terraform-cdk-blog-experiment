@@ -1,0 +1,25 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12"
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.04
+      - name: install cdk terraform
+        run: npm install --glabal cdktf-cli@next
+      - name: check
+        run: |
+          cdktf get
+          cdktf synth
